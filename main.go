@@ -187,16 +187,6 @@ func (kv *Store) Incr(key string) (int64, error) {
 
 func (kv *Store) Delete(key string) bool {
 	e, ok := kv.data[key]
-
-	if ok && kv.expired(e) {
-		delete(kv.data, key)
-		e, ok = Point{}, false
-	}
-
-	if ok {
-		delete(kv.data, key)
-		return true
-	} else {
-		return false
-	}
+	delete(kv.data, key)
+	return ok && !kv.expired(e)
 }
